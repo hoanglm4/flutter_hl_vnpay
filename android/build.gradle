@@ -1,0 +1,46 @@
+group 'com.hlsolutions.flutter_hl_vnpay.flutter_hl_vnpay'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.kotlin_version = '1.3.50'
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 29
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    defaultConfig {
+        minSdkVersion 16
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation files('libs/Sdk-release1.17_live.aar')
+    implementation "com.squareup.okhttp3:okhttp:4.2.2"
+    implementation 'com.google.code.gson:gson:2.8.6'
+}

@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.hlsolutions.flutter_hl_vnpay.flutter_hl_vnpay">
+    <application>
+        <provider
+            android:name="com.vnpay.authentication.LibContentProvider"
+            tools:replace="android:authorities"
+            android:authorities="${applicationId}.libcontentprovider"
+            android:enabled="true"
+            android:exported="false"
+            android:initOrder="2147483647" />
+    </application>
+</manifest>
