@@ -1,8 +1,7 @@
 name: flutter_hl_vnpay
-description: A new flutter plugin project.
-version: 0.0.1
-author:
-homepage:
+description: A VNPAY flutter plugin project.
+version: 1.0.1
+homepage: https://github.com/hoanglm4/flutter_hl_vnpay.git
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

@@ -26,7 +26,7 @@ Add this to you package's `pubspec.yaml` file:
 dependencies:
   flutter_hl_vnpay: ^1.0.1
   crypto: 2.1.5
-
+```
 #### 2\. Install
 Run command:
 
