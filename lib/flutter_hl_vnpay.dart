@@ -9,19 +9,18 @@ class FlutterHlVnpay {
   Stream<MethodCall> get _methodStream => _methodStreamController.stream;
 
   FlutterHlVnpay._() {
-    _channel.setMethodCallHandler((MethodCall call) {
+    _channel.setMethodCallHandler((MethodCall call) async {
       print('[setMethodCallHandler] call = $call');
       _methodStreamController.add(call);
-      return;
     });
   }
 
   static FlutterHlVnpay _instance = new FlutterHlVnpay._();
   static FlutterHlVnpay get instance => _instance;
 
-  Future<int> show({
-    String paymentUrl,
-    String tmnCode,
+  Future<int?> show({
+    required String paymentUrl,
+    required String tmnCode,
     String scheme = '',
     bool isSandbox = true,
     String backAlert = 'Bạn có chắc chắn trở lại ko?',
@@ -47,7 +46,7 @@ class FlutterHlVnpay {
     await _channel.invokeMethod('show', params);
     await for (MethodCall m in _methodStream) {
       if (m.method == "PaymentBack") {
-        return m.arguments['resultCode'] as int;
+        return m.arguments['resultCode'] as int?;
       }
     }
   }

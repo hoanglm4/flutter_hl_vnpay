@@ -42,7 +42,9 @@ class _MyAppState extends State<MyApp> {
         'vnp_OrderInfo': '5fa66b8b5f376a000417e501 pay coin 30000 VND',
         'vnp_ReturnUrl': 'XXX', // Your Server https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/#code-returnurl
         'vnp_TmnCode': tmnCode,
-        'vnp_TxnRef': '604f187c862cd70004478e',
+        'vnp_TxnRef': DateTime
+            .now()
+            .millisecondsSinceEpoch.toString(),
         'vnp_Version': '2.0.0'
       };
 
@@ -63,7 +65,7 @@ class _MyAppState extends State<MyApp> {
       final vnpSecureHash = sha256.convert(bytes);
       final paymentUrl = "$url?$query&vnp_SecureHashType=SHA256&vnp_SecureHash=$vnpSecureHash";
       print('paymentUrl = $paymentUrl');
-      paymentResultCodeCode = (await FlutterHlVnpay.instance.show(paymentUrl: paymentUrl, tmnCode: tmnCode)).toString();
+      paymentResultCodeCode = (await FlutterHlVnpay.instance.show(paymentUrl: paymentUrl, tmnCode: tmnCode, scheme: 'hlsolutions')).toString();
     } on PlatformException {
       paymentResultCodeCode = 'Failed to get payment result code';
     }

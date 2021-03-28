@@ -3,6 +3,7 @@
 
 @interface FlutterHlVnpayPlugin ()
 @property(nonatomic, retain) FlutterMethodChannel *channel;
+@property(nonatomic, copy) NSString *latestScheme;
 @end
 
 @implementation FlutterHlVnpayPlugin
@@ -13,6 +14,7 @@
     FlutterHlVnpayPlugin* instance = [[FlutterHlVnpayPlugin alloc] init];
     instance.channel = channel;
     [registrar addMethodCallDelegate:instance channel:channel];
+    [registrar addApplicationDelegate:instance];
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
@@ -40,6 +42,8 @@
     NSString *endColor = value[@"endColor"];
     NSString *titleColor = value[@"titleColor"];
     NSString *tmn_code = value[@"tmn_code"];
+    
+    self.latestScheme = scheme;
 
     [CallAppInterface setSchemes:scheme];
     [CallAppInterface setIsSandbox:isSandbox];
@@ -90,6 +94,31 @@
         topController = topController.presentedViewController;
     }
     return topController;
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
+    NSString *latestLink = [url absoluteString];
+    NSString *scheme = [url scheme];
+    NSString *host = [url host];
+    if ([@"vnpay" isEqualToString:host] && [self.latestScheme isEqualToString:scheme]) {
+        UIViewController *topController = [self viewControllerWithWindow:nil];
+        UIWindow *windowToUse = nil;
+        if (windowToUse == nil) {
+            for (UIWindow *window in [UIApplication sharedApplication].windows) {
+                if (window.isKeyWindow) {
+                    windowToUse = window;
+                    break;
+                }
+            }
+        }
+       
+        if ([topController isKindOfClass:[FlutterViewController class]] == false) {
+            [topController dismissViewControllerAnimated:YES completion:nil];
+        }
+    }
+    return YES;
 }
 
 @end
