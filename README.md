@@ -16,6 +16,24 @@ In the **ios/Runner/Info.plist** let’s add:
                 <true/>
           </dict>
 ```
+
+```dart
+   	<key>CFBundleURLTypes</key>
+   	<array>
+   		<dict>
+   			<key>CFBundleTypeRole</key>
+   			<string>Editor</string>
+   			<key>CFBundleURLName</key>
+   			<string>com.hlsolutions.hoishipper</string>
+   			<key>CFBundleURLSchemes</key>
+   			<array>
+   				<string>hlsolutions</string>
+   			</array>
+   		</dict>
+   	</array>
+
+```
+
 #### **Android**
 
 ## Usage
@@ -24,7 +42,7 @@ Add this to you package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  flutter_hl_vnpay: ^1.0.1
+  flutter_hl_vnpay: ^2.0.0
   crypto: 2.1.5
 ```
 #### 2\. Install
