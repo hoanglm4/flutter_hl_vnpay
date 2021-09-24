@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:4.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -18,6 +18,9 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 
@@ -39,8 +42,9 @@ android {
 }
 
 dependencies {
+    implementation fileTree(dir: "libs", include: ["*.aar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation files('libs/Sdk-release1.17_live.aar')
+    implementation files('libs/merchant-1.0.24.aar')
     implementation "com.squareup.okhttp3:okhttp:4.2.2"
     implementation 'com.google.code.gson:gson:2.8.6'
 }

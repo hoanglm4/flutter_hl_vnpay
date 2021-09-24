@@ -62,17 +62,31 @@
         [[NSNotificationCenter defaultCenter] removeObserver:self];
 
         NSString *actionValue=[notification.object valueForKey:@"Action"];
-        if ([@"AppBackAction" isEqualToString:actionValue]) {//Người dùng nhấn back từ sdk để quay lại
+        if ([@"AppBackAction" isEqualToString:actionValue]) {
+            //Người dùng nhấn back từ sdk để quay lại
             [_channel invokeMethod:@"PaymentBack" arguments:@{@"resultCode":@-1}];
             return;
         }
-        if ([@"WebBackAction" isEqualToString:actionValue]) {//Người dùng nhấn back từ trang thanh toán thành công khi thanh toán qua thẻ khi gọi đến http://sdk.merchantbackapp
-            [_channel invokeMethod:@"PaymentBack" arguments:@{@"resultCode":@10}];
+        if ([@"CallMobileBankingApp" isEqualToString:actionValue]) {
+        //Người dùng nhấn chọn thanh toán qua app thanh toán (Mobile Banking, Ví...)
+             [_channel invokeMethod:@"PaymentBack" arguments:@{@"resultCode":@10}];
+             return;
+        }
+        if ([@"WebBackAction" isEqualToString:actionValue]) {
+            //Người dùng nhấn back từ trang thanh toán thành công khi thanh toán qua thẻ khi gọi đến http://sdk.merchantbackapp
+            [_channel invokeMethod:@"PaymentBack" arguments:@{@"resultCode":@24}];
             return;
         }
-
-        if ([@"CallMobileBankingApp" isEqualToString:actionValue]) {//Người dùng nhấn chọn thanh toán qua app thanh toán (Mobile Banking, Ví...)
+        if ([@"FaildBackAction" isEqualToString:actionValue]) {
+             [_channel invokeMethod:@"PaymentBack" arguments:@{@"resultCode":@99}];
+             return;
+        }
+        if ([@"FailBackAction" isEqualToString:actionValue]) {
             [_channel invokeMethod:@"PaymentBack" arguments:@{@"resultCode":@99}];
+            return;
+        }
+        if ([@"SuccessBackAction" isEqualToString:actionValue]) {
+            [_channel invokeMethod:@"PaymentBack" arguments:@{@"resultCode":@0}];
             return;
         }
     }

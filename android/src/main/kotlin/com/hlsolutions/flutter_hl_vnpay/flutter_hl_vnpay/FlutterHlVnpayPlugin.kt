@@ -1,6 +1,9 @@
 package com.hlsolutions.flutter_hl_vnpay.flutter_hl_vnpay
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import androidx.annotation.NonNull
 import com.vnpay.authentication.VNP_AuthenticationActivity
 
@@ -67,7 +70,48 @@ class FlutterHlVnpayPlugin : FlutterPlugin, ActivityAware, PluginRegistry.Activi
             putExtra("scheme", scheme)
             putExtra("tmn_code", tmnCode)
         }
-        activityBinding?.activity?.startActivityForResult(intent, 99)
+        VNP_AuthenticationActivity.setSdkCompletedCallback { action ->
+            Log.wtf("VNP_AuthenticationActivity", "action: $action")
+            if (action == "AppBackAction") {
+                channel.invokeMethod("PaymentBack", hashMapOf("resultCode" to -1))
+            }
+            if (action == "CallMobileBankingApp") {
+                channel.invokeMethod("PaymentBack", hashMapOf("resultCode" to 10))
+            }
+            if (action == "WebBackAction") {
+                channel.invokeMethod("PaymentBack", hashMapOf("resultCode" to 24))
+            }
+            if (action == "FaildBackAction") {
+                channel.invokeMethod("PaymentBack", hashMapOf("resultCode" to 99))
+            }
+            if (action == "FailBackAction") {
+                channel.invokeMethod("PaymentBack", hashMapOf("resultCode" to 99))
+            }
+            if (action == "SuccessBackAction") {
+                channel.invokeMethod("PaymentBack", hashMapOf("resultCode" to 0))
+            }
+
+            //action == AppBackAction
+            //Người dùng nhấn back từ sdk để quay lại
+
+            //action == CallMobileBankingApp
+            //Người dùng nhấn chọn thanh toán qua app thanh toán (Mobile Banking, Ví...)
+            //lúc này app tích hợp sẽ cần lưu lại mã giao dịch thanh toán (vnp_TxnRef). Khi người dùng mở lại app tích hợp với cheme thì sẽ gọi kiểm tra trạng thái thanh toán của mã TxnRef đó kiểm tra xem đã thanh toán hay chưa để thực hiện nghiệp vụ kết thúc thanh toán / thông báo kết quả cho khách hàng..
+
+            //action == WebBackAction
+            //Tạo nút sự kiện cho user click từ return url của merchant chuyển hướng về URL: http://cancel.sdk.merchantbackapp
+            // vnp_ResponseCode == 24 / Khách hàng hủy thanh toán.
+
+            //action == FaildBackAction
+            //Tạo nút sự kiện cho user click từ return url của merchant chuyển hướng về URL: http://fail.sdk.merchantbackapp
+            // vnp_ResponseCode != 00 / Giao dịch thanh toán không thành công
+
+            //action == SuccessBackAction
+            //Tạo nút sự kiện cho user click từ return url của merchant chuyển hướng về URL: http://success.sdk.merchantbackapp
+            //vnp_ResponseCode == 00) / Giao dịch thành công
+        }
+        activityBinding?.activity?.startActivity(intent)
+//        activityBinding?.activity?.startActivityForResult(intent, 99)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
