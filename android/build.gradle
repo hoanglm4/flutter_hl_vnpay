@@ -19,7 +19,7 @@ rootProject.allprojects {
         google()
         jcenter()
         flatDir {
-            dirs 'libs'
+            dirs project(':flutter_hl_vnpay').file('libs')
         }
     }
 }
@@ -42,7 +42,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.aar"])
+  //  implementation fileTree(dir: "libs", include: ["*.aar"])
+    api(name: 'merchant-1.0.24', ext: 'aar')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation files('libs/merchant-1.0.24.aar')
     implementation "com.squareup.okhttp3:okhttp:4.2.2"
